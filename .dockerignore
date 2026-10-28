@@ -1,0 +1,13 @@
+.git
+.idea
+.venv
+**/__pycache__
+**/*.pyc
+data
+docs
+output
+pandasscript
+tests
+*.md
+uv.lock
+pyproject.toml

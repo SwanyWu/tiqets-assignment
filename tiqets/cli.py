@@ -4,7 +4,6 @@ import argparse
 import sys
 from pathlib import Path
 
-from tiqets import __version__
 from tiqets.load import InputError
 from tiqets.output import write_vouchers
 from tiqets.process import generate
@@ -38,8 +37,6 @@ def main(argv: list[str] | None = None) -> int:
         f"{len(report.issues)} validation {issue_noun}",
     )
     sys.stdout.write(report.render_stdout())
-    if args.strict and report.issues:
-        return 3
     return 0
 
 
@@ -55,8 +52,7 @@ def _parser() -> argparse.ArgumentParser:
         ),
         epilog=(
             "Exit codes: 0 file written, 1 the export could not be read or written, "
-            "2 invalid arguments, 3 validation problems were found and --strict was set. "
-            "With --strict the file is still written."
+            "2 invalid arguments. A written file can still list skipped rows on stderr."
         ),
     )
     parser.add_argument(
@@ -65,12 +61,6 @@ def _parser() -> argparse.ArgumentParser:
         default=5,
         help="how many customers to print, ranked by tickets bought (default: 5)",
     )
-    parser.add_argument(
-        "--strict",
-        action="store_true",
-        help="exit 3 when any row fails validation; the voucher file is still written",
-    )
-    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     return parser
 
 

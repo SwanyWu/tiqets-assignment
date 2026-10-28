@@ -36,23 +36,7 @@ def test_success_writes_the_file_and_prints_the_ranking(
     assert captured.err.count("WARNING") == 8
 
 
-def test_strict_still_writes_the_file(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    output = tmp_path / "vouchers.csv"
-    _point_at(
-        monkeypatch,
-        ROOT / "data" / "orders.csv",
-        ROOT / "data" / "barcodes.csv",
-        output,
-    )
-
-    assert cli.main(["--strict"]) == 3
-    assert output.exists()
-    assert len(output.read_text(encoding="utf-8").splitlines()) == 204
-
-
-def test_strict_succeeds_when_every_row_is_valid(
+def test_clean_export_exits_0(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     orders = tmp_path / "orders.csv"
@@ -62,7 +46,7 @@ def test_strict_succeeds_when_every_row_is_valid(
     barcodes.write_text("barcode,order_id\n111,1\n", encoding="utf-8")
     _point_at(monkeypatch, orders, barcodes, output)
 
-    assert cli.main(["--strict", "--top", "1"]) == 0
+    assert cli.main(["--top", "1"]) == 0
 
     assert output.read_text(encoding="utf-8") == "10, 1, [111]\n"
     captured = capsys.readouterr()
