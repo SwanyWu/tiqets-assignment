@@ -69,4 +69,4 @@ The customer, order, and barcode relations are in [docs/data_model.md](docs/data
 
 ## Deployment Plan
 
-How the job is built, scheduled, and rolled back is in [docs/deployment.md](docs/deployment.md).
+How the program is built, deployed, and rolled back is in [docs/deployment.md](docs/deployment.md).
