@@ -1,13 +1,13 @@
 # Deployment
 
-This program runs once and exits. It reads `data/orders.csv` and `data/barcodes.csv`, writes `output/vouchers.csv`, prints the ranking on stdout, and prints skipped rows on stderr. It does not stay running and it does not open a port.
+This program runs once and exits. It reads `data/input/orders.csv` and `data/input/barcodes.csv`, writes `data/output/vouchers.csv`, prints the ranking on stdout, and prints skipped rows on stderr. It does not stay running and it does not open a port.
 
 > [!NOTE]
 > There are many ways to over-engineer this simple project. The steps below show how to deploy this in-memory, one-off app. In reality we need a database to deduplicate, keep track of history, and so on, and perhaps a cronjob (for example on Kubernetes) to keep generating the voucher.
 
 ## Image
 
-`Dockerfile` builds an image with Python 3.12, `main.py`, and the `tiqets` package. The program uses the standard library, so the image does not install pandas. The orders and barcodes files are not copied into the image. They are mounted at run time.
+`Dockerfile` builds an image with Python 3.12, `main.py`, and the `tiqets` package. The program uses the standard library. The orders and barcodes files are not copied into the image. They are mounted at run time.
 
 The image process is user `vouchers`, uid `10001`. The only argument is `--top` (default 5).
 
@@ -17,23 +17,23 @@ From the repository root:
 
 ```bash
 docker build -t tiqets-vouchers:1.0.0 .
-mkdir -p output
+mkdir -p data/output
 docker run --rm \
   -u "$(id -u):$(id -g)" \
-  -v "$PWD/data:/app/data:ro" \
-  -v "$PWD/output:/app/output" \
+  -v "$PWD/data/input:/app/data/input:ro" \
+  -v "$PWD/data/output:/app/data/output" \
   tiqets-vouchers:1.0.0
 ```
 
-`-u` makes the voucher file owned by the user who launched the run. Without it, the process is uid `10001` and can write `output/` only when that directory allows that user. The data mount is read-only.
+`-u` makes the voucher file owned by the user who launched the run. Without it, the process is uid `10001` and can write `data/output/` only when that directory allows that user. The input mount is read-only.
 
 Pass `--top` the same way as `python main.py`:
 
 ```bash
 docker run --rm \
   -u "$(id -u):$(id -g)" \
-  -v "$PWD/data:/app/data:ro" \
-  -v "$PWD/output:/app/output" \
+  -v "$PWD/data/input:/app/data/input:ro" \
+  -v "$PWD/data/output:/app/data/output" \
   tiqets-vouchers:1.0.0 --top 5
 ```
 

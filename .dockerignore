@@ -5,7 +5,6 @@
 **/*.pyc
 data
 docs
-output
 tests
 *.md
 uv.lock

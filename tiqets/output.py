@@ -8,6 +8,22 @@ from tiqets.models import Report
 
 
 def write_vouchers(path: Path, report: Report) -> None:
+    """Write the voucher lines to path, replacing any existing file.
+
+    Args:
+        path: Destination, usually data/output/vouchers.csv.
+        report: Report whose lines are written. Ranking and issues are not.
+
+    Returns:
+        None.
+
+    Raises:
+        OSError: The directory could not be created or the file could not be written.
+
+    Example:
+        A line for customer 10 and order 1 becomes
+        ``10, 1, [111, 222]\\n``.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     handle = tempfile.NamedTemporaryFile(
         mode="w",

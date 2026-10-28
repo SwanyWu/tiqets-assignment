@@ -17,7 +17,7 @@ EMPTY_ORDERS = {"75", "108", "201"}
 
 
 def test_bundled_exports_match_the_known_report() -> None:
-    report = generate(ROOT / "data" / "orders.csv", ROOT / "data" / "barcodes.csv")
+    report = generate(ROOT / "data" / "input" / "orders.csv", ROOT / "data" / "input" / "barcodes.csv")
 
     assert report.top_customers == (
         ("10", 23),
@@ -45,7 +45,7 @@ def test_bundled_exports_match_the_known_report() -> None:
 
 
 def test_bundled_lines_are_sorted_as_text() -> None:
-    report = generate(ROOT / "data" / "orders.csv", ROOT / "data" / "barcodes.csv")
+    report = generate(ROOT / "data" / "input" / "orders.csv", ROOT / "data" / "input" / "barcodes.csv")
     keys = [(line.customer_id, line.order_id) for line in report.lines]
 
     assert keys == sorted(keys)

@@ -21,8 +21,8 @@ def test_success_writes_the_file_and_prints_the_ranking(
     output = tmp_path / "vouchers.csv"
     _point_at(
         monkeypatch,
-        ROOT / "data" / "orders.csv",
-        ROOT / "data" / "barcodes.csv",
+        ROOT / "data" / "input" / "orders.csv",
+        ROOT / "data" / "input" / "barcodes.csv",
         output,
     )
 
@@ -60,7 +60,7 @@ def test_missing_export_exits_1(
     _point_at(
         monkeypatch,
         tmp_path / "missing.csv",
-        ROOT / "data" / "barcodes.csv",
+        ROOT / "data" / "input" / "barcodes.csv",
         tmp_path / "vouchers.csv",
     )
 

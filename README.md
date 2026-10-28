@@ -2,7 +2,7 @@
 
 This project reads `orders.csv` and `barcodes.csv` to
 - generate `vouchers.csv`.
-- print top `<N>` customers who bought the most tickets
+- log top `<N>` customers who bought the most tickets
 - the number of barcodes are still unsold.
 
 It needs Python 3.12 or newer and standard library.
@@ -41,7 +41,7 @@ Rows that fail validation are written to stderr and left out of the file. A summ
 WARNING duplicate barcode 11111111674; ignoring every occurrence
 ...
 WARNING order 75 for customer 72 has no barcodes; ignoring
-INFO wrote 204 lines to output/vouchers.csv; 8 validation issues
+INFO wrote 204 lines to data/output/vouchers.csv; 8 validation issues
 ```
 
 ## Validation

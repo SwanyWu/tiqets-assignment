@@ -8,9 +8,9 @@ from tiqets.load import InputError
 from tiqets.output import write_vouchers
 from tiqets.process import generate
 
-DEFAULT_ORDERS = Path("data/orders.csv")
-DEFAULT_BARCODES = Path("data/barcodes.csv")
-DEFAULT_OUTPUT = Path("output/vouchers.csv")
+DEFAULT_ORDERS = Path("data/input/orders.csv")
+DEFAULT_BARCODES = Path("data/input/barcodes.csv")
+DEFAULT_OUTPUT = Path("data/output/vouchers.csv")
 
 
 def main(argv: list[str] | None = None) -> int:
