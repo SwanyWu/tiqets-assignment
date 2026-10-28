@@ -6,7 +6,6 @@
 data
 docs
 output
-pandasscript
 tests
 *.md
 uv.lock

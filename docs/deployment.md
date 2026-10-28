@@ -43,18 +43,6 @@ The same run without Docker, from a checkout:
 python main.py
 ```
 
-## Exit codes
-
-| Code | Meaning | What to do |
-| --- | --- | --- |
-| 0 | File written. | Print it. Also read stderr: validation warnings can still be present. |
-| 1 | An export is missing, unreadable, or has the wrong header, or the output path could not be written. | Retry once the files are in place. No voucher file is written on a read failure. |
-| 2 | The arguments are invalid. | Fix the command. This code comes from the argument parser. |
-
-The process exits 0 when the file was written, including when some rows were skipped. Stderr still lists every skipped row. Alert on any `WARNING` line.
-
-Stdout is the top-customers report. Capture it for the ranking, and give the print pipeline the output path.
-
 ## Same input, same file
 
 Lines are sorted by customer id, then order id, both as text. Barcodes on a line are sorted as text. Reordering rows in the export does not change the voucher file. A rerun with the same image and the same exports is safe.
@@ -64,14 +52,3 @@ Lines are sorted by customer id, then order id, both as text. Barcodes on a line
 Keep the previous dated file. If a run is wrong, point the printer back at that path. Do not edit the voucher file in place. Fix the export and rerun.
 
 The image tag is the release. Roll back by running the previous image tag against the same exports.
-
-## Data
-
-The files contain customer identifiers and ticket codes. Treat the export directory and `output/` as personal data:
-
-- mount exports read-only
-- do not log the successful voucher lines; stderr logs only the rows that failed validation
-- the voucher file is created with mode `0600` on Unix
-- do not commit `output/` or the raw exports to a public repository if they contain real customers
-
-Both files are loaded into memory. Duplicate detection has to see every barcode before it can decide which rows to drop.

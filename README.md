@@ -2,10 +2,10 @@
 
 This project reads `orders.csv` and `barcodes.csv` to
 - generate `vouchers.csv`.
-- print top <N> customers who bought the most tickets
+- print top `<N>` customers who bought the most tickets
 - the number of barcodes are still unsold.
 
-It needs Python 3.12 or newer and standard library (`/pandasscript`implements a simple script using library *pandas*, but it's a standalone project)
+It needs Python 3.12 or newer and standard library.
 
 > [!NOTE]
 > There are plenty of ways to over-engineer this. `Pandas` library is enough to join the two files and filter them, but that little script is not something you'd actually run in production. You'd want audit logs, error handling, monitoring, alerting, a database, maybe an API to hand the vouchers out, and Kubernetes or Terraform so the whole thing sits in CI/CD.
@@ -39,16 +39,10 @@ Rows that fail validation are written to stderr and left out of the file. A summ
 
 ```text
 WARNING duplicate barcode 11111111674; ignoring every occurrence
+...
 WARNING order 75 for customer 72 has no barcodes; ignoring
 INFO wrote 204 lines to output/vouchers.csv; 8 validation issues
 ```
-
-A completed file is exit 0, including when some rows were skipped. Those rows are listed on stderr. Exit 1 means an export could not be read or the output could not be written. Exit 2 means the arguments are invalid.
-
-| Flag | Default | Purpose |
-| --- | --- | --- |
-| `--top` | `5` | How many customers to print |
-
 
 ## Validation
 
@@ -76,11 +70,3 @@ The customer, order, and barcode relations are in [docs/data_model.md](docs/data
 ## Deployment Plan
 
 How the job is built, scheduled, and rolled back is in [docs/deployment.md](docs/deployment.md).
-
-## Pandas script
-
-`pandasscript/vouchers.py` is separate. It needs pandas, writes `output/vouchers_pandas.csv`, strips leading zeros from numeric ids, and sorts those ids numerically.
-
-```bash
-python pandasscript/vouchers.py
-```
