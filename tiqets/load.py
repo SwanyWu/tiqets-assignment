@@ -36,12 +36,6 @@ def load_barcodes(path: Path) -> ReadResult[BarcodeRecord]:
     return ReadResult(tuple(records), tuple(issues))
 
 
-def normalize_id(value: str) -> str:
-    if value.isdigit():
-        return str(int(value))
-    return value
-
-
 def _read_rows(path: Path, required: tuple[str, ...]) -> list[dict[str, str]]:
     try:
         with path.open(newline="", encoding="utf-8-sig") as handle:
@@ -94,7 +88,7 @@ def _header(path: Path, header: list[str], required: tuple[str, ...]) -> list[st
 def _parse_order(row: dict[str, str]) -> OrderRecord | Issue:
     order_id = row.get("order_id", "").strip()
     customer_id = row.get("customer_id", "").strip()
-    return OrderRecord(normalize_id(order_id), normalize_id(customer_id))
+    return OrderRecord(order_id, customer_id)
 
 
 def _parse_barcode(row: dict[str, str]) -> BarcodeRecord | Issue:
@@ -102,4 +96,4 @@ def _parse_barcode(row: dict[str, str]) -> BarcodeRecord | Issue:
     order_id = row.get("order_id", "").strip()
     if order_id == "":
         return BarcodeRecord(barcode, None)
-    return BarcodeRecord(barcode, normalize_id(order_id))
+    return BarcodeRecord(barcode, order_id)
